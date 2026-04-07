@@ -1,0 +1,25 @@
+# ttm-model-foundry global defaults.
+# This file is a STUB during the Step 1-5 foundation build. No runtime code
+# reads it yet. Keys mirror what the brief implies will be needed in later
+# steps; they are commented to mark which become live when.
+
+# --- Loop caps (Section 4 of the brief) ---
+caps:
+  inner_loop_implementation_retries: 5      # live at Step 9 (inner loop)
+  inner_loop_stability_retries: 3           # live at Step 9
+  inner_loop_behavioral_retries: 2          # live at Step 9
+  middle_loop_revisions: 3                  # live at Step 10 (Co-Reviser)
+  outer_loop_alignment_retries: 2           # live at Step 11 (Alignment Judge)
+  outer_loop_empirical_equivalence_back_flows: 1  # live at Step 11
+
+# --- Budgets (Section 9: cost monitoring with hard abort) ---
+budget:
+  max_total_tokens: null                    # live at Step 6
+  max_total_calls: null                     # live at Step 6
+
+# --- Paths ---
+paths:
+  runs_dir: runs                            # live at Step 6
+  schemas_dir: schemas                      # already in use
+  skills_dir: skills                        # already in use
+  primitives_dir: primitives                # already in use

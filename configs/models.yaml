@@ -1,0 +1,12 @@
+# LLM model assignments per agent. STUB during Step 1-5; populated when
+# agents are added in Steps 9+.
+agents:
+  ontologist: null
+  programmer: null
+  falsifier: null
+  co_reviser: null
+  prediction_generator: null
+  experimenter: null
+  alignment_judge: null
+  vulnerability_scanner: null
+  summarizer: null

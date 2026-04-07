@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ttm-model-foundry/schemas/model_spec.schema.json",
+  "title": "ModelSpec",
+  "description": "Model specification (M). Section 6 of the build brief. Registry-existence and equation-LHS coverage are checked separately by src/validators/schema_checks.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_id",
+    "parent_theory_id",
+    "parent_model_id",
+    "paradigm",
+    "paradigm_choices_allowed",
+    "primary_state_variables",
+    "structural_parameters",
+    "inputs",
+    "equations_of_motion",
+    "linking_functions",
+    "falsification_signatures",
+    "target_phenomena",
+    "theory_anchor"
+  ],
+  "properties": {
+    "model_id": {"type": "string", "minLength": 1},
+    "parent_theory_id": {"type": "string", "minLength": 1},
+    "parent_model_id": {"type": ["string", "null"]},
+    "paradigm": {"type": "string", "minLength": 1},
+    "paradigm_choices_allowed": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "primary_state_variables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "domain", "initial_value"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "description": {"type": "string"},
+          "domain": {"type": "string"},
+          "initial_value": {}
+        }
+      }
+    },
+    "structural_parameters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "prior_range", "sweep"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "description": {"type": "string"},
+          "prior_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {"type": "number"}
+          },
+          "sweep": {"type": "boolean"},
+          "sweep_resolution": {"type": "integer", "minimum": 2}
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type", "description"],
+        "properties": {
+          "name": {"type": "string"},
+          "type": {"type": "string"},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "equations_of_motion": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variable", "form_latex", "form_sympy"],
+        "properties": {
+          "variable": {"type": "string", "minLength": 1},
+          "form_latex": {"type": "string"},
+          "form_sympy": {"type": "string"}
+        }
+      }
+    },
+    "linking_functions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["observable", "from_states", "function_id", "function_params"],
+        "properties": {
+          "observable": {"type": "string"},
+          "from_states": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "function_id": {"type": "string", "minLength": 1},
+          "function_params": {"type": "object"}
+        }
+      }
+    },
+    "falsification_signatures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signature_id",
+          "metric_function",
+          "metric_params",
+          "expected_operator",
+          "expected_value",
+          "robust_across_param",
+          "robust_range"
+        ],
+        "properties": {
+          "signature_id": {"type": "string", "minLength": 1},
+          "metric_function": {"type": "string", "minLength": 1},
+          "metric_params": {"type": "object"},
+          "expected_operator": {
+            "type": "string",
+            "enum": [">", ">=", "<", "<=", "==", "!=", "approx"]
+          },
+          "expected_value": {},
+          "robust_across_param": {"type": "string"},
+          "robust_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {"type": "number"}
+          }
+        }
+      }
+    },
+    "target_phenomena": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behavioral", "neural"],
+      "properties": {
+        "behavioral": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["phenomenon", "derivation"],
+            "properties": {
+              "phenomenon": {"type": "string"},
+              "derivation": {"type": "string"}
+            }
+          }
+        },
+        "neural": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["phenomenon", "derivation"],
+            "properties": {
+              "phenomenon": {"type": "string"},
+              "derivation": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "theory_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core_mechanistic_claim", "claim_hash", "complexity_floor_features"],
+      "properties": {
+        "core_mechanistic_claim": {"type": "string", "minLength": 1},
+        "claim_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "sha256 hex of core_mechanistic_claim. Set on M_v1, immutable thereafter."
+        },
+        "complexity_floor_features": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "Mandatory parameter sweep rule (\u00a79): at least one structural_parameters entry must have sweep: true.",
+      "properties": {
+        "structural_parameters": {
+          "type": "array",
+          "contains": {
+            "type": "object",
+            "properties": {"sweep": {"const": true}},
+            "required": ["sweep"]
+          }
+        }
+      }
+    },
+    {
+      "description": "Paradigm must be in paradigm_choices_allowed (checked structurally; the actual set membership is verified in schema_checks.py since pure JSON Schema cannot reference a sibling array).",
+      "properties": {
+        "paradigm_choices_allowed": {"minItems": 1}
+      }
+    }
+  ]
+}
