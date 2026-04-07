@@ -1,0 +1,18 @@
+{
+  "theory_id": "T_TEST",
+  "theory_name": "Minimal coupled-oscillator entrainment theory",
+  "parent_kernel_id": "K_TEST",
+  "core_claim": "Cortical oscillators in the theta band entrain to amplitude-modulated acoustic input via weak phase coupling.",
+  "mechanism": "Phase coupling between an external rhythmic drive and an intrinsic theta-band cortical oscillator produces emergent phase locking.",
+  "scope": "Healthy adults listening to amplitude-modulated tones in the 4-8 Hz range.",
+  "main_assumptions": [
+    "The cortical oscillator is well-approximated by a single-phase oscillator.",
+    "Coupling is weak and sinusoidal in the phase difference."
+  ],
+  "alternatives_ruled_out": [
+    "Pure transient evoked-response account: predicts no sustained phase locking beyond a few cycles."
+  ],
+  "distinctive_falsifiable_prediction": "Phase-locking value between cortex and stimulus envelope exceeds 0.4 in the 4-8 Hz band over the 100-400 ms post-onset window, robustly across coupling strengths in [1.0, 3.0].",
+  "what_would_falsify_it": "PLV does not exceed 0.4 anywhere in the [1.0, 3.0] coupling range, OR PLV exceeds 0.4 only at a single coupling value (no robust regime).",
+  "notes": "Test fixture for ttm-model-foundry."
+}

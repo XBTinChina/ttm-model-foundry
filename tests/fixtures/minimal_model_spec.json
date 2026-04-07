@@ -1,0 +1,74 @@
+{
+  "model_id": "M_TEST_v1",
+  "parent_theory_id": "T_TEST",
+  "parent_model_id": null,
+  "paradigm": "coupled_oscillators",
+  "paradigm_choices_allowed": [
+    "coupled_oscillators",
+    "drift_diffusion",
+    "ode_population_dynamics"
+  ],
+  "primary_state_variables": [
+    {"name": "phi_1", "description": "phase of cortical oscillator 1", "domain": "R", "initial_value": 0.0},
+    {"name": "phi_2", "description": "phase of cortical oscillator 2", "domain": "R", "initial_value": 0.0}
+  ],
+  "structural_parameters": [
+    {
+      "name": "K",
+      "description": "coupling strength",
+      "prior_range": [0.0, 5.0],
+      "sweep": true,
+      "sweep_resolution": 11
+    }
+  ],
+  "inputs": [
+    {"name": "stimulus_envelope", "type": "time_series", "description": "amplitude-modulated tone envelope"}
+  ],
+  "equations_of_motion": [
+    {
+      "variable": "phi_1",
+      "form_latex": "\\frac{d\\phi_1}{dt} = \\omega_1 + K \\sin(\\phi_2 - \\phi_1)",
+      "form_sympy": "Derivative(phi_1, t) - omega_1 - K*sin(phi_2 - phi_1)"
+    },
+    {
+      "variable": "phi_2",
+      "form_latex": "\\frac{d\\phi_2}{dt} = \\omega_2 + K \\sin(\\phi_1 - \\phi_2)",
+      "form_sympy": "Derivative(phi_2, t) - omega_2 - K*sin(phi_1 - phi_2)"
+    }
+  ],
+  "linking_functions": [
+    {
+      "observable": "behavioral_RT",
+      "from_states": ["phi_1"],
+      "function_id": "rt_from_phase_threshold",
+      "function_params": {"threshold": 1.5}
+    }
+  ],
+  "falsification_signatures": [
+    {
+      "signature_id": "FS01",
+      "metric_function": "compute_phase_locking_value",
+      "metric_params": {"band": [4, 8], "window_ms": [100, 400]},
+      "expected_operator": ">",
+      "expected_value": 0.4,
+      "robust_across_param": "K",
+      "robust_range": [1.0, 3.0]
+    }
+  ],
+  "target_phenomena": {
+    "behavioral": [
+      {"phenomenon": "RT decreases with coupling strength", "derivation": "linking_functions[0]"}
+    ],
+    "neural": [
+      {"phenomenon": "PLV > 0.4 in theta band", "derivation": "FS01"}
+    ]
+  },
+  "theory_anchor": {
+    "core_mechanistic_claim": "Cortical oscillators in the theta band entrain to amplitude-modulated acoustic input via weak phase coupling.",
+    "claim_hash": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "complexity_floor_features": [
+      "non-linear coupling between oscillators",
+      "emergent phase synchrony rather than imposed locking"
+    ]
+  }
+}

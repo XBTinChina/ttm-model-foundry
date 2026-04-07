@@ -1,0 +1,37 @@
+# Allowed paradigms, observables, and methods. STUB during Step 1-5.
+paradigms:
+  - coupled_oscillators
+  - drift_diffusion
+  - ode_population_dynamics
+  - sde_neural_mass
+  - pomdp_active_inference
+  - rl_update_rules
+  - spiking_network
+  - graph_dynamics
+  - predictive_coding
+  - rate_distortion
+  - kalman_inference
+
+observables:
+  # Anything in analyzers/registry.py is implicitly allowed; this list
+  # documents the public-facing categories the Experimenter should target.
+  - band_power
+  - psd_peak
+  - peak_frequency
+  - phase_locking_value
+  - inter_trial_coherence
+  - pairwise_phase_consistency
+  - phase_amplitude_coupling
+  - granger_causality_pair
+  - erp_component_amplitude
+  - erp_component_latency
+  - rt_distribution
+  - accuracy_curve
+  - learning_trajectory
+
+methods:
+  recording:
+    - eeg
+    - meg
+    - ieeg
+    - behavioral_only
